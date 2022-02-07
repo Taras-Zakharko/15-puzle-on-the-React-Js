@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TimerCounter from "./TimerCounter";
 import Main from "./Main";
 
@@ -6,31 +6,46 @@ import DarckBg from "../bg/mainBlBg.jpg";
 import whiteBg from "../bg/mainWhBg.jpg";
 
 export default function Game() {
-  const [cells, setCells] = useState([]);
-
-  const [type, setType] = useState("8");
-  useEffect(() => setType((prevType) => prevType = '15'), [setType]);
-
   const [colorTheme, setColorTheme] = useState(true);
 
-  // function changeType(e) {
-  //   setType(type = e.target.value)
-  //   return type;
-  // }
+  const [type, setType] = useState("8");
 
-  // if(document.getElementById('type') !== null){
-  //   if(document.getElementById('type').value){
-  //     console.log(document.getElementById('type').value);
-  //   }
-  //   console.log('hi');
-  // }
+  const [manualMixing, setManualMixing] = useState(true);
 
   let [numbers, setNumbers] = useState(
     [...Array(+type).keys()].map((x) => x + 1)
   );
 
-  const onChangeCountCellHandler = () =>
-    setNumbers([...Array(+type).keys()].map((x) => x + 1));
+  useEffect(() => {
+    setType((prevType) => (prevType = document.querySelector("#type").value));
+    setNumbers(
+      (prevNumbers) =>
+        (prevNumbers = [...Array(+type).keys()].map((x) => x + 1))
+    );
+  }, [setType, type, setNumbers]);
+
+  const [time, setTime] = useState(0);
+  const [start, setStart] = useState(false);
+  let [counter, setCounter] = useState(0);
+
+  const onChangeCountCellHandler = useCallback(
+    () =>
+      setNumbers(
+        (prevNumbers) =>
+          (prevNumbers = [...Array(+type).keys()].map((x) => x + 1))
+      ),
+    [type, setNumbers]
+  );
+
+  const onChangeCountCellHandlerRandom = useCallback(
+    () =>
+      setNumbers(
+        [...Array(+type).keys()]
+          .map((x) => x + 1)
+          .sort(() => Math.random() - 0.5)
+      ),
+    [type, setNumbers]
+  );
 
   return (
     <div
@@ -59,9 +74,13 @@ export default function Game() {
               }}
               value={type}
               id="type"
-              onChange={(e) => {
-                setNumbers([...Array(+type).keys()].map((x) => x + 1));
-              }}
+              onChange={useCallback(() => {
+                setType(
+                  (prevType) =>
+                    (prevType = document.querySelector("#type").value)
+                );
+                onChangeCountCellHandler();
+              }, [setType, onChangeCountCellHandler])}
             >
               <option
                 value="8"
@@ -83,7 +102,10 @@ export default function Game() {
                   color: colorTheme ? "rgb(34, 34, 34)" : "#dedede",
                   borderColor: colorTheme ? "rgb(34, 34, 34)" : "#dedede",
                 }}
-                onClick={onChangeCountCellHandler}
+                onClick={useCallback(() => {
+                  onChangeCountCellHandler();
+                  setManualMixing(true);
+                }, [onChangeCountCellHandler, setManualMixing])}
               >
                 Перемішати вручну
               </button>
@@ -93,13 +115,10 @@ export default function Game() {
                   color: colorTheme ? "rgb(34, 34, 34)" : "#dedede",
                   borderColor: colorTheme ? "rgb(34, 34, 34)" : "#dedede",
                 }}
-                onClick={() =>
-                  setNumbers(
-                    [...Array(+type).keys()]
-                      .map((x) => x + 1)
-                      .sort(() => Math.random() - 0.5)
-                  )
-                }
+                onClick={useCallback(() => {
+                  onChangeCountCellHandlerRandom();
+                  setManualMixing(false);
+                }, [onChangeCountCellHandlerRandom, setManualMixing])}
               >
                 Перемішати
               </button>
@@ -109,9 +128,10 @@ export default function Game() {
                   color: colorTheme ? "rgb(34, 34, 34)" : "#dedede",
                   borderColor: colorTheme ? "rgb(34, 34, 34)" : "#dedede",
                 }}
-                onClick={() =>
-                  setNumbers([...Array(+type).keys()].map((x) => x + 1))
-                }
+                onClick={useCallback(() => {
+                  onChangeCountCellHandler();
+                  setManualMixing(false);
+                }, [onChangeCountCellHandler, setManualMixing])}
               >
                 Зібрати пазл
               </button>
@@ -127,14 +147,25 @@ export default function Game() {
             </label>
           </div>
         </nav>
-        <TimerCounter colorTheme={colorTheme} />
+        <TimerCounter
+          colorTheme={colorTheme}
+          time={time}
+          setTime={setTime}
+          start={start}
+          setStart={setStart}
+          counter={counter}
+          setCounter={setCounter}
+          setManualMixing={setManualMixing}
+        />
       </header>
       <Main
         colorTheme={colorTheme}
         numbers={numbers}
         type={type}
-        cells={cells}
-        setCells={setCells}
+        setTime={setTime}
+        setStart={setStart}
+        setCounter={setCounter}
+        manualMixing={manualMixing}
       />
     </div>
   );

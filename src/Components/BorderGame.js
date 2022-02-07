@@ -2,7 +2,6 @@ import React from "react";
 import SmallCells from "./SmallCells";
 
 export default function BorderGame(props) {
-  console.log(props);
   return (
     <div
       className="feild"
@@ -13,12 +12,6 @@ export default function BorderGame(props) {
         backgroundColor: props.colorTheme ? "#dedede" : "#3f3f3f",
       }}
     >
-      {/* <div
-          type={props.type} 
-          numbers={props.numbers} 
-          colorTheme={props.colorTheme}
-          /> */}
-
       <SmallCells
         cellSize={props.cellSize}
         empty={props.empty}
@@ -32,6 +25,7 @@ export default function BorderGame(props) {
         setTime={props.setTime}
         setStart={props.setStart}
         setCounter={props.setCounter}
+        manualMixing={props.manualMixing}
       />
     </div>
   );

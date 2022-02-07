@@ -1,12 +1,10 @@
-import './App.css';
-// import Game from './Game';
-import GameCopy from './GameCopy';
+import "./App.css";
+import Game from "./Game";
 
 function App() {
   return (
     <div className="App">
-      {/* <Game/> */}
-      <GameCopy/>
+      <Game />
     </div>
   );
 }

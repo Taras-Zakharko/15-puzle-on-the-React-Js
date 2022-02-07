@@ -1,30 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 export default function TimerCounter(props) {
-  // const [time, setTime] = useState(0);
-  // const [start, setStart] = useState(false);
-  // let [counter, setCounter] = useState(0);
-
-  // useEffect((e)=>{
-  //   if (document.querySelector(".feild") !== null) {
-  //     document.querySelector(".feild").addEventListener("click", (e) => {
-  //       console.log(e.target.className === "cell");
-  //       if (e.target.className === "cell") {
-  //         setStart(true);
-  //         setCounter((prevCounter) => prevCounter +1);
-  //       }
-  //     });
-  //   }
-  // },[setStart, setCounter ])
-
-  // useEffect(()=>{
-  //   if (props.win()) {
-  //     setStart((prev) => prev =);
-
-  //   }
-  // }, [setStart, props])
-  console.log(props);
-
   useEffect(() => {
     let interval = null;
     if (props.start) {
@@ -36,7 +12,7 @@ export default function TimerCounter(props) {
     }
 
     return () => clearInterval(interval);
-  }, [props.start]);
+  }, [props]);
 
   return (
     <div className="time-block">
@@ -47,7 +23,10 @@ export default function TimerCounter(props) {
             color: props.colorTheme ? "rgb(34, 34, 34)" : "#dedede",
             borderColor: props.colorTheme ? "rgb(34, 34, 34)" : "#dedede",
           }}
-          onClick={() => props.setStart(true)}
+          onClick={() => {
+            props.setStart(true);
+            props.setManualMixing(false);
+          }}
         >
           Старт
         </button>
@@ -70,6 +49,7 @@ export default function TimerCounter(props) {
           onClick={() => {
             props.setTime(0);
             props.setStart(false);
+            props.setCounter(0);
           }}
         >
           Почати заново
@@ -78,7 +58,10 @@ export default function TimerCounter(props) {
       <div className="time-value">
         <h2 style={{ color: props.colorTheme ? "rgb(34, 34, 34)" : "#dedede" }}>
           Ваш час:
-          <span> {("0" + Math.floor((props.time / 60000) % 60)).slice(-2)}:</span>
+          <span>
+            {" "}
+            {("0" + Math.floor((props.time / 60000) % 60)).slice(-2)}:
+          </span>
           <span>{("0" + Math.floor((props.time / 1000) % 60)).slice(-2)}:</span>
           <span>{("0" + ((props.time / 10) % 1000)).slice(-2)}</span>
         </h2>

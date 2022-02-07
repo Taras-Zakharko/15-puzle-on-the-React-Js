@@ -1,16 +1,12 @@
 import React, { useMemo, useCallback } from "react";
 
-
 export default function SmallCells(props) {
- 
   const cellArr = document.querySelectorAll(".cell");
 
   const win = useCallback(() => {
     let winer = false;
 
     for (let i = 0; i < cellArr.length; i++) {
-      console.log(cellArr[i].getAttribute("value"), props.winerComb[i]);
-      
       const check = () => {
         if (+cellArr[i].getAttribute("value") === props.winerComb[i].value) {
           if (
@@ -35,19 +31,12 @@ export default function SmallCells(props) {
     return winer;
   }, [cellArr, props.winerComb]);
 
-  console.log(props.winerComb);
-  
   const moveCells = useCallback(
     (e) => {
       const cell = e.target;
-      console.log(cell);
 
       const leftDiv = Math.abs(props.empty.left - +cell.getAttribute("left"));
       const topDiv = Math.abs(props.empty.top - +cell.getAttribute("top"));
-      console.log(props.empty.left, +cell.getAttribute("left"));
-      console.log(props.empty.top, +cell.getAttribute("top"));
-
-      console.log(leftDiv + topDiv);
 
       if (leftDiv + topDiv > 1) {
         return;
@@ -65,18 +54,17 @@ export default function SmallCells(props) {
       cell.setAttribute("left", emptyLeft);
       cell.setAttribute("top", emptyTop);
 
-      props.setStart(true)
-      props.setCounter((prev) => prev + 1)
+      if (!props.manualMixing) {
+        props.setStart(true);
+        props.setCounter((prev) => prev + 1);
+      }
 
       if (win()) {
-        props.setStart(false)
+        props.setStart(false);
         alert("You win");
       }
     },
-    [
-      props,
-      win
-    ]
+    [props, win]
   );
 
   const GemeBlock = useMemo(() => {
