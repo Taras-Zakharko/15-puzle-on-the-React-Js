@@ -7,17 +7,23 @@ export default function SmallCells(props) {
     let winer = false;
 
     for (let i = 0; i < cellArr.length; i++) {
+      
       const check = () => {
-        if (+cellArr[i].getAttribute("value") === props.winerComb[i].value) {
-          if (
-            +cellArr[i].getAttribute("left") === props.winerComb[i].left &&
-            +cellArr[i].getAttribute("top") === props.winerComb[i].top
-          ) {
-            return true;
-          } else {
-            return false;
+        for (let j = 0; j < props.winerComb.length; j++) {
+          const element = props.winerComb[j];
+
+          if (+cellArr[i].getAttribute("value") === props.winerComb[j].value) {
+            if (
+              +cellArr[i].getAttribute("left") === props.winerComb[j].left &&
+              +cellArr[i].getAttribute("top") === props.winerComb[j].top
+            ) {
+              return true;
+            } else {
+              return false;
+            }
           }
         }
+        
       };
 
       if (!check()) {
