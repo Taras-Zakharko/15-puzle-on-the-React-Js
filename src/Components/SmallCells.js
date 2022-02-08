@@ -10,7 +10,6 @@ export default function SmallCells(props) {
       
       const check = () => {
         for (let j = 0; j < props.winerComb.length; j++) {
-          const element = props.winerComb[j];
 
           if (+cellArr[i].getAttribute("value") === props.winerComb[j].value) {
             if (
